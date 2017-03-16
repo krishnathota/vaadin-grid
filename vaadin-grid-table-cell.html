@@ -76,6 +76,11 @@
 
       ready: function() {
         this.classList.add('vaadin-grid-cell');
+
+        if (Polymer.Settings.useShadow === false) {
+          this.classList.add('style-scope');
+          this.classList.add('vaadin-grid-table');
+        }
       },
 
       _columnChanged: function(column) {

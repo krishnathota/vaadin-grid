@@ -395,6 +395,10 @@
     },
 
     _updateLastFrozen: function() {
+      if (this.columnTree === undefined) {
+        return;
+      }
+
       var columnsRow = this.columnTree[this.columnTree.length - 1].slice(0);
       columnsRow.sort(function(a, b) {
         return a._order - b._order;
