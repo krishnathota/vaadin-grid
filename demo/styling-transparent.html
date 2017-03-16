@@ -161,9 +161,12 @@
             </vaadin-grid>
           </template>
           <script>
-            var transparentTemplate = document.querySelector('#transparent-template');
+            var scope = document.querySelector('#transparent-template');
+            if (Polymer.Element) {
+              scope = scope.parentElement;
+            }
 
-            transparentTemplate._activeItemChanged = function(e) {
+            scope._activeItemChanged = function(e) {
               var grid = e.target;
               this._clickedItem = grid.activeItem ? grid.activeItem : this._clickedItem;
 
