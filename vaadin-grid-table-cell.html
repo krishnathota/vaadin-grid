@@ -429,7 +429,7 @@
         // Get the target column to resize
         var column = this.column;
         if (column.localName === 'vaadin-grid-column-group') {
-          column = column._childColumns.slice(0)
+          column = Array.prototype.slice.call(column._childColumns, 0)
           .sort(function(a, b) {
             return a._order - b._order;
           })
@@ -449,10 +449,11 @@
 
         // Fix width and flex-grow for all preceding columns
         var header = this.parentElement.parentElement;
-        Polymer.dom(header).querySelectorAll('.vaadin-grid-row:last-child .vaadin-grid-cell')
-        .sort(function(a, b) {
-          return a.column._order - b.column._order;
-        })
+        Array.prototype.slice.call(Polymer.dom(header).querySelectorAll('.vaadin-grid-row:last-child .vaadin-grid-cell'))
+        .sort(
+          function(a, b) {
+            return a.column._order - b.column._order;
+          })
         .forEach(function(cell, index, array) {
           if (index < array.indexOf(targetCell)) {
             cell.column.width = cell.offsetWidth + 'px';
@@ -469,7 +470,7 @@
 
       _getHeaderCellByColumn: function(column) {
         var header = this.parentElement.parentElement;
-        return Polymer.dom(header).querySelectorAll('.vaadin-grid-row:last-child .vaadin-grid-cell').filter(function(cell) {
+        return Array.prototype.filter.call(Polymer.dom(header).querySelectorAll('.vaadin-grid-row:last-child .vaadin-grid-cell'), function(cell) {
           return cell.column === column;
         })[0];
       },

@@ -105,7 +105,7 @@
     },
 
     _setSiblingsReorderStatus: function(column, status) {
-      Polymer.dom(Polymer.dom(column).parentNode).children.filter(function(child) {
+      Array.prototype.filter.call(Polymer.dom(Polymer.dom(column).parentNode).children, function(child) {
         return /column/.test(child.localName) && this._isSwapAllowed(child, column);
       }, this).forEach(function(sibling) {
         sibling._reorderStatus = status;
@@ -162,7 +162,7 @@
     },
 
     _isSwappableByPosition: function(targetColumn, clientX) {
-      var targetCell = Polymer.dom(this.$.header).querySelectorAll('.vaadin-grid-cell').filter(function(cell) {
+      var targetCell = Array.prototype.filter.call(Polymer.dom(this.$.header).querySelectorAll('.vaadin-grid-cell'), function(cell) {
         return cell.column === targetColumn;
       })[0];
       var sourceCellRect = this.$.header.querySelector('[reorder-status=dragging]').getBoundingClientRect();

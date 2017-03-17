@@ -428,7 +428,7 @@
         return;
       }
 
-      physicalItems.forEach(function(row) {
+      Array.prototype.forEach.call(physicalItems, function(row) {
         row.rowDetailsTemplate = rowDetailsTemplate;
       });
     },
@@ -441,7 +441,7 @@
       this._frozenCellsChanged();
       this._hasTemplatesChanged(columnTree);
 
-      physicalItems.forEach(function(row) {
+      Array.prototype.forEach.call(physicalItems, function(row) {
         row.columns = columnTree[columnTree.length - 1];
       });
 
@@ -450,7 +450,7 @@
     },
 
     _updateLastColumn: function() {
-      Polymer.dom(this.$.table).querySelectorAll('.vaadin-grid-row').forEach(function(row) {
+      Array.prototype.forEach.call(Polymer.dom(this.$.table).querySelectorAll('.vaadin-grid-row'), function(row) {
         row.updateLastColumn();
       });
     },

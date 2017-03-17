@@ -384,7 +384,7 @@
         Polymer.dom(this.root).querySelectorAll('.vaadin-grid-cell').forEach(function(cell) {
           cell.style.transform = '';
         });
-        this._frozenCells = Polymer.dom(this.root).querySelectorAll('[frozen]');
+        this._frozenCells = Array.prototype.slice.call(Polymer.dom(this.root).querySelectorAll('[frozen]'));
         this._translateStationaryElements();
       });
       this._updateLastFrozen();
