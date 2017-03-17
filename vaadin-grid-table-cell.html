@@ -376,7 +376,7 @@
           var cell = scroller.root.elementFromPoint(x, y);
           scroller.toggleAttribute('no-content-pointer-events', false);
           if (cell && cell.getContentChildren) {
-            return cell.getContentChildren('content')[0];
+            return cell.getContentChildren(Polymer.Element ? 'slot': 'content')[0];
           }
         } else {
           return document.elementFromPoint(x, y);

@@ -176,18 +176,31 @@
 
     _getCellByCellContent: function(cellContent) {
       if (cellContent) {
-        var contentId = null;
-        while (contentId === null && cellContent !== this.target && cellContent) {
-          contentId = cellContent.getAttribute('data-cell-content-id');
-          cellContent = cellContent.parentElement;
-        }
+        if (Polymer.Element) {
+          var contentId = null;
+          while (contentId === null && cellContent !== this.target && cellContent) {
+            contentId = cellContent.getAttribute('slot');
+            cellContent = cellContent.parentElement;
+          }
 
-        if (contentId !== null) {
-          var injectionPoint = Polymer.dom(this.$.table).querySelectorAll('content')
-          .filter(function(content) {
-            return content.getAttribute('select') === '[data-cell-content-id="' + contentId + '"]';
-          })[0];
-          return Polymer.dom(injectionPoint).parentNode;
+          if (contentId !== null) {
+            var injectionPoint = Polymer.dom(this.$.table).querySelector('slot[name=' + contentId + ']');
+            return Polymer.dom(injectionPoint).parentNode;
+          }
+        } else {
+          var contentId = null;
+          while (contentId === null && cellContent !== this.target && cellContent) {
+            contentId = cellContent.getAttribute('data-cell-content-id');
+            cellContent = cellContent.parentElement;
+          }
+
+          if (contentId !== null) {
+            var injectionPoint = Polymer.dom(this.$.table).querySelectorAll('content')
+            .filter(function(content) {
+              return content.getAttribute('select') === '[data-cell-content-id="' + contentId + '"]';
+            })[0];
+            return Polymer.dom(injectionPoint).parentNode;
+          }
         }
       }
     },

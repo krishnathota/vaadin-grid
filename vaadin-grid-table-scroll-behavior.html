@@ -169,7 +169,7 @@
     _hasScrolledAncestor: function(el, deltaX, deltaY) {
       if (this._canScroll(el, deltaX, deltaY)) {
         return true;
-      } else if (!el.hasAttribute('data-cell-content-id') && el !== this && el.parentElement) {
+      } else if (el.classList.toString().indexOf('cell-content') === -1 && el !== this && el.parentElement) {
         return this._hasScrolledAncestor(el.parentElement, deltaX, deltaY);
       }
     },
