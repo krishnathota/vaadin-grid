@@ -159,7 +159,19 @@
           })[0];
           if (!cell) {
             cell = this._createCell();
-            cache.push(cell);
+
+            // Need to disable caching in Polymer 2 <dom-repeat> generated columns since
+            // the current implementation reuses template instances for different items.
+            //
+            // Once https://github.com/Polymer/polymer/pull/4363 is released, 'restamp'
+            // property can be used to utilize caching in <dom-repeat> generated columns also.
+            var disableCache = Array.prototype.some.call(this.target.querySelectorAll('dom-repeat'), function(domRepeat) {
+              return !domRepeat.restamp;
+            });
+
+            if (!disableCache) {
+              cache.push(cell);
+            }
           }
 
           cell.index = this.index;

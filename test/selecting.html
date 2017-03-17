@@ -47,7 +47,7 @@
         <vaadin-grid-column>
           <template class="header">
             <vaadin-grid-filter path="value" value="[[filter]]">
-              <input id="filter" value="{{filter::input}}">
+              <input id="filter" slot="filter" value="{{filter::input}}">
             </vaadin-grid-filter>
           </template>
           <template></template>

@@ -73,21 +73,23 @@
     </template>
   </test-fixture>
 
-  <template is="dom-bind">
-    <style is="custom-style">
-      #dom-bind-grid .my-content {
-        color: rgb(255, 0, 0);
-      }
-    </style>
-
-    <vaadin-grid style="height: 400px;" size="1000" data-provider="[[dataProvider]]" id="dom-bind-grid">
-      <vaadin-grid-column>
-        <template>
-          <b class="my-content">[[index]]</b>
-        </template>
-      </vaadin-grid-column>
-    </vaadin-grid>
-  </template>
+  <dom-bind>
+    <template is="dom-bind">
+      <style>
+        #dom-bind-grid .my-content {
+          color: rgb(255, 0, 0);
+        }
+      </style>
+    
+      <vaadin-grid style="height: 400px;" size="1000" data-provider="[[dataProvider]]" id="dom-bind-grid">
+        <vaadin-grid-column>
+          <template>
+            <b class="my-content">[[index]]</b>
+          </template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </dom-bind>
 
 
 

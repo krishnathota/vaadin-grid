@@ -73,7 +73,7 @@
         // in native Shadow, tab order goes first through shadow root, then moves over
         // to light children. We need to make sure footer focus trap is always
         // the very last element that can be tabbed into.
-        if (Polymer.Settings.useNativeShadow) {
+        if (Polymer.Settings.useNativeShadow || Polymer.Settings.useShadow) {
           Polymer.dom(this).insertBefore(this.$.scroller.$.bodyFocusTrap, Polymer.dom(this).firstElementChild);
           Polymer.dom(this).insertBefore(this.$.scroller.$.headerFocusTrap, Polymer.dom(this).firstElementChild);
           Polymer.dom(this).appendChild(this.$.scroller.$.footerFocusTrap);
@@ -110,7 +110,7 @@
         'vaadin-grid-selection-column'
       ].forEach(function(elementName) {
         var element = Polymer.dom(this).querySelector(elementName);
-        if (element && !Polymer.isInstance(element)) {
+        if (element && (Polymer.isInstance ? !Polymer.isInstance(element) : !(element instanceof Polymer.Element))) {
           console.warn('Make sure you have imported the required module for <' + elementName + '> element.');
         }
       }, this);

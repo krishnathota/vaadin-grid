@@ -161,7 +161,7 @@
         grid._columnTree[0][1].width = '50%';
         grid._columnTree[0][1].flexGrow = 1;
         Polymer.Base.fire('track', {state: 'start'}, {node: handle});
-        expect(grid._columnTree[0][1].width.indexOf('px')).not.to.equal(-1);
+        expect(grid._columnTree[0][1].width).to.contain('px');
         expect(grid._columnTree[0][1].flexGrow).to.equal(0);
       });
 
@@ -197,6 +197,8 @@
         var newColumn = document.createElement('vaadin-grid-column');
         Polymer.dom(grid._columnTree[0][0]).appendChild(newColumn);
         Polymer.dom.flush();
+        grid._columnTree[0][0]._observer.flush(); //v2
+
         expect(newColumn.resizable).to.be.true;
       });
 

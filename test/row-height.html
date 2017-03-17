@@ -16,6 +16,16 @@
 
 <body>
 
+  <custom-style>
+    <style is="custom-style">
+      vaadin-grid {
+        --vaadin-grid-cell: {
+          border: none !important;
+        }
+      }
+    </style>
+  </custom-style>
+
   <test-fixture id="two-columns">
     <template>
       <vaadin-grid style="width: 200px; height: 200px;" size="10000">
@@ -75,8 +85,6 @@
           Polymer.dom.flush();
 
           rows = getRows(scroller.$.items);
-          grid.customStyle['--vaadin-grid-cell'] = 'border: none !important';
-          grid.updateStyles();
           defaultHeight = getRows(header)[0].clientHeight;
 
           wrappers = getRowCells(rows[0]).map(function(cell) {

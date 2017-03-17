@@ -322,6 +322,8 @@
         it('should have visible footer rows after adding extra column', function() {
           Polymer.dom(grid).appendChild(extraColumn);
           Polymer.dom.flush();
+          grid._observer.flush(); //v2
+
           expect(getRows(footer)[0].hidden).to.be.false;
           expect(getRows(footer)[1].hidden).to.be.true;
         });

@@ -15,15 +15,17 @@
 </head>
 
 <body>
-  <style is="custom-style">
-    vaadin-grid {
-      height: 500px;
-      --vaadin-grid-body-cell: {
-        padding: 0;
-        height: 50px;
+  <custom-style>
+    <style is="custom-style">
+      vaadin-grid {
+        height: 500px;
+        --vaadin-grid-body-cell: {
+          padding: 0;
+          height: 50px;
+        }
       }
-    }
-  </style>
+    </style>
+  </custom-style>
   <test-fixture id="default">
     <template>
       <vaadin-grid>
@@ -130,70 +132,70 @@
         }
 
         function tab() {
-          var event = MockInteractions.keyDownOn(grid, 9);
+          var event = MockInteractions.keyDownOn(grid.$.scroller, 9);
         }
 
         function shiftTab() {
-          MockInteractions.keyDownOn(grid, 9, 'shift');
+          MockInteractions.keyDownOn(grid.$.scroller, 9, 'shift');
         }
 
         function left() {
-          MockInteractions.keyDownOn(grid, 37);
+          MockInteractions.keyDownOn(grid.$.scroller, 37);
         }
 
         function up() {
-          MockInteractions.keyDownOn(grid, 38);
+          MockInteractions.keyDownOn(grid.$.scroller, 38);
         }
 
         function right() {
-          MockInteractions.keyDownOn(grid, 39);
+          MockInteractions.keyDownOn(grid.$.scroller, 39);
         }
 
         function down() {
-          MockInteractions.keyDownOn(grid, 40);
+          MockInteractions.keyDownOn(grid.$.scroller, 40);
         }
 
         function space() {
-          MockInteractions.keyDownOn(grid, 32);
+          MockInteractions.keyDownOn(grid.$.scroller, 32);
         }
 
         function pageUp() {
-          MockInteractions.keyDownOn(grid, 33);
+          MockInteractions.keyDownOn(grid.$.scroller, 33);
         }
 
         function pageDown() {
-          MockInteractions.keyDownOn(grid, 34);
+          MockInteractions.keyDownOn(grid.$.scroller, 34);
         }
 
         function end() {
-          MockInteractions.keyDownOn(grid, 35);
+          MockInteractions.keyDownOn(grid.$.scroller, 35);
         }
 
         function ctrlEnd() {
-          MockInteractions.keyDownOn(grid, 35, 'ctrl');
+          MockInteractions.keyDownOn(grid.$.scroller, 35, 'ctrl');
         }
 
         function home() {
-          MockInteractions.keyDownOn(grid, 36);
+          MockInteractions.keyDownOn(grid.$.scroller, 36);
         }
 
         function ctrlHome() {
-          MockInteractions.keyDownOn(grid, 36, 'ctrl');
+          MockInteractions.keyDownOn(grid.$.scroller, 36, 'ctrl');
         }
 
         function enter(target) {
-          MockInteractions.keyDownOn(target || grid, 13);
+          MockInteractions.keyDownOn(target || grid.$.scroller, 13);
         }
 
         function escape() {
-          MockInteractions.keyDownOn(grid, 27);
+          MockInteractions.keyDownOn(grid.$.scroller, 27);
         }
 
         function f2() {
           // keycode is 113, but needs to be increment by one until
           // https://github.com/PolymerElements/iron-a11y-keys-behavior/pull/64
           // is merged.
-          MockInteractions.keyDownOn(grid, 113 + 1);
+          MockInteractions.keyDownOn(grid.$.scroller, 113 + 1);
         }
 
         function getFirstHeaderCell() {
@@ -315,19 +317,20 @@
         describe('navigating with tab', function() {
           beforeEach(function() {
             scroller.navigating = true;
+            grid._observer.flush();
           });
 
           it('should have a focus trap as the very first child', function() {
             // header focus trap needs to be the first element
-            var trap = Polymer.dom(Polymer.Settings.useNativeShadow ? grid : scroller.root).querySelector(':not(style)');
+            var trap = Polymer.dom((Polymer.Settings.useNativeShadow || Polymer.Settings.useShadow) ? grid : scroller.root).querySelector(':not(style)');
 
             expect(trap.children[0].tabIndex).to.eql(0);
           });
 
           it('should have a focus trap as the very last child', function() {
             // footer focus trap needs to be the last element
-            var trap = Polymer.Settings.useNativeShadow ? grid.lastElementChild : scroller.lastElementChild;
-
+            var trap = (Polymer.Settings.useNativeShadow || Polymer.Settings.useShadow) ? grid.lastElementChild : scroller.lastElementChild;
+            console.log(trap)
             expect(trap.children[0].tabIndex).to.eql(0);
           });
 
@@ -828,6 +831,7 @@
             clickItem(0);
 
             ctrlEnd();
+            grid.$.scroller.flushDebouncer('vaadin-grid-scrolling');
 
             expect(scroller._virtualFocus._focusedRow).to.eql(body.children[body.children.length - 1]);
           });

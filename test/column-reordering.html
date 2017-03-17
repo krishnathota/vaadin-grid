@@ -20,13 +20,15 @@
   <test-fixture id="default">
     <template>
       <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
-        <template is="dom-repeat" items="[1, 2, 3, 4]" as="col">
-          <vaadin-grid-column resizable>
-            <template class="header">[[col]]</template>
-            <template>[[col]]</template>
-            <template class="footer">[[col]]</template>
-          </vaadin-grid-column>
-        </template>
+        <dom-repeat items="[1, 2, 3, 4]" as="col">
+          <template is="dom-repeat" items="[1, 2, 3, 4]" as="col">
+            <vaadin-grid-column resizable>
+              <template class="header">[[col]]</template>
+              <template>[[col]]</template>
+              <template class="footer">[[col]]</template>
+            </vaadin-grid-column>
+          </template>
+        </dom-repeat>
 
         <template class="row-details">
           foo
@@ -38,19 +40,25 @@
   <test-fixture id="groups">
     <template>
       <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
-        <template is="dom-repeat" items="[1, 2]" as="colgroup">
-          <vaadin-grid-column-group>
-            <template class="header">[[colgroup]]</template>
-            <template class="footer">[[colgroup]]</template>
-            <template is="dom-repeat" items="[1, 2]" as="col">
-              <vaadin-grid-column>
-                <template class="header">[[colgroup]][[col]]</template>
-                <template>[[colgroup]][[col]]</template>
-                <template class="footer">[[colgroup]][[col]]</template>
-              </vaadin-grid-column>
-            </template>
-          </vaadin-grid-column-group>
-        </template>
+        <dom-repeat items="[1, 2]" as="colgroup">
+          <template is="dom-repeat" items="[1, 2]" as="colgroup">
+            <vaadin-grid-column-group>
+              <template class="header">[[colgroup]]</template>
+              <template class="footer">[[colgroup]]</template>
+              <!-- For some weird reason <template is="dom-repeat"> works inside a template,
+                   but <dom-repeat>, not so much -->
+              <!--<dom-repeat items="[1, 2]" as="col">-->
+                <template is="dom-repeat" items="[1, 2]" as="col">
+                  <vaadin-grid-column>
+                    <template class="header">[[colgroup]][[col]]</template>
+                    <template>[[colgroup]][[col]]</template>
+                    <template class="footer">[[colgroup]][[col]]</template>
+                  </vaadin-grid-column>
+                </template>
+              <!--</dom-repeat>-->
+            </vaadin-grid-column-group>
+          </template>
+        </dom-repeat>
       </vaadin-grid>
     </template>
   </test-fixture>
@@ -74,13 +82,15 @@
     <template>
       <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
         <vaadin-grid-column-group>
-          <template is="dom-repeat" items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]" as="col">
-            <vaadin-grid-column width="10px">
-              <template class="header">[[col]]</template>
-              <template>[[col]]</template>
-              <template class="footer">[[col]]</template>
-            </vaadin-grid-column>
-          </template>
+          <dom-repeat items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]" as="col">
+            <template is="dom-repeat" items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]" as="col">
+              <vaadin-grid-column width="10px">
+                <template class="header">[[col]]</template>
+                <template>[[col]]</template>
+                <template class="footer">[[col]]</template>
+              </vaadin-grid-column>
+            </template>
+          </dom-repeat>
         </vaadin-grid-column-group>
         <vaadin-grid-column width="10px">
           <template class="header">12</template>
@@ -93,7 +103,7 @@
 
   <script>
     function getVisualCellContent(section, row, col) {
-      var cell = Polymer.dom(section).querySelectorAll('.vaadin-grid-cell').pop();
+      var cell = Array.prototype.slice.call(Polymer.dom(section).querySelectorAll('.vaadin-grid-cell')).pop();
       if (section.tagName === 'VAADIN-GRID-TABLE-FOOTER') {
         cell = Polymer.dom(section).querySelector('.vaadin-grid-cell');
       }
@@ -114,7 +124,7 @@
       var scroller = grid.$.scroller;
       var headerContent = getVisualCellContent(scroller.$.header, getRows(scroller.$.header).length - 1, col);
       var footerContent = getVisualCellContent(scroller.$.footer, 0, col);
-      var bodyContent = Polymer.dom(scroller.$.items).children.map(function(row, rowIndex) {
+      var bodyContent = Array.prototype.map.call(Polymer.dom(scroller.$.items).children, function(row, rowIndex) {
         return getVisualCellContent(scroller.$.items, rowIndex, col);
       });
       return bodyContent.concat(headerContent).concat(footerContent);

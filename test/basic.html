@@ -178,6 +178,10 @@
 
         Polymer.dom(grid).appendChild(document.createElement('vaadin-grid-sorter'));
         Polymer.dom.flush();
+        if (grid._observer.flush) {
+          grid._observer.flush();
+        }
+
         grid.flushDebouncer('check-imports');
         console.warn = _warn;
 
@@ -190,7 +194,11 @@
           var spy = console.warn = sinon.spy();
 
           Polymer.dom(grid).appendChild(document.createElement('vaadin-grid-sorter'));
-
+          Polymer.dom.flush();
+          if (grid._observer.flush) {
+            grid._observer.flush();
+          }
+          
           grid.flushDebouncer('check-imports');
           console.warn = _warn;
 
