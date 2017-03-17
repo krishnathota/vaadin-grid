@@ -21,13 +21,9 @@
   vaadin.elements = vaadin.elements || {};
   vaadin.elements.grid = vaadin.elements.grid || {};
 
-  /**
-   * @polymerBehavior vaadin.elements.grid.KeyboardNavigationBehaviorImpl
-   */
-  vaadin.elements.grid.KeyboardNavigationBehaviorImpl = {
+  vaadin.elements.grid.TableKeyboardBehaviorImpl = {
+
     hostAttributes: {
-      // keys can be listened only when vaadin-grid is focusable
-      'tabindex': -1,
       'role': 'application'
     },
 
@@ -53,82 +49,6 @@
     attached: function() {
       Polymer.IronA11yAnnouncer.requestAvailability();
     },
-
-    _onEnd: function(e) {
-      this.$.scroller._onEnd(e);
-    },
-
-    _onEnter: function(e) {
-      this.$.scroller._onEnter(e);
-    },
-
-    _onEscape: function(e) {
-      this.$.scroller._onEscape(e);
-    },
-
-    _onF2: function(e) {
-      this.$.scroller._onF2(e);
-    },
-
-    _onTab: function(e) {
-      this.$.scroller._onTab(e);
-    },
-
-    _onShiftTab: function(e) {
-      this.$.scroller._onShiftTab(e);
-    },
-
-    _onArrowDown: function(e) {
-      this.$.scroller._onArrowDown(e);
-    },
-
-    _onArrowUp: function(e) {
-      this.$.scroller._onArrowUp(e);
-    },
-
-    _onArrowRight: function(e) {
-      this.$.scroller._onArrowRight(e);
-    },
-
-    _onArrowLeft: function(e) {
-      this.$.scroller._onArrowLeft(e);
-    },
-
-    _onHome: function(e) {
-      this.$.scroller._onHome(e);
-    },
-
-    _onCtrlHome: function(e) {
-      this.$.scroller._onCtrlHome(e);
-    },
-
-    _onCtrlEnd: function(e) {
-      this.$.scroller._onCtrlEnd(e);
-    },
-
-    _onPageDown: function(e) {
-      this.$.scroller._onPageDown(e);
-    },
-
-    _onPageUp: function(e) {
-      this.$.scroller._onPageUp(e);
-    },
-
-    _onSpace: function(e) {
-      this.$.scroller._onSpace(e);
-    },
-  };
-
-  /**
-   * @polymerBehavior vaadin.elements.grid.KeyboardNavigationBehavior
-   */
-  vaadin.elements.grid.KeyboardNavigationBehavior = [vaadin.elements.grid.KeyboardNavigationBehaviorImpl, Polymer.IronA11yKeysBehavior];
-
-
-  /**
-   * @polymerBehavior vaadin.elements.grid.TableKeyboardBehavior
-   */
-  vaadin.elements.grid.TableKeyboardBehavior = {
 
     properties: {
       _virtualFocus: {
@@ -516,13 +436,13 @@
       var row = cell.parentElement;
       var container = row.parentElement;
 
-      var rowIndex = Polymer.dom(container).children.indexOf(row);
+      var rowIndex = Array.prototype.indexOf.call(Polymer.dom(container).children, row);
       if (container === this.$.items) {
         rowIndex = row.index;
       }
 
       container._focusedRowIndex = rowIndex;
-      container._focusedCellIndex = Polymer.dom(row).children.indexOf(cell);
+      container._focusedCellIndex = Array.prototype.indexOf.call(Polymer.dom(row).children, cell);
       this._virtualFocus = container;
 
       if (cell.hasAttribute('detailscell')) {
@@ -581,4 +501,9 @@
       }
     }
   };
+
+    /**
+   * @polymerBehavior vaadin.elements.grid.TableKeyboardBehavior
+   */
+  vaadin.elements.grid.TableKeyboardBehavior = [vaadin.elements.grid.TableKeyboardBehaviorImpl, Polymer.IronA11yKeysBehavior];
 </script>

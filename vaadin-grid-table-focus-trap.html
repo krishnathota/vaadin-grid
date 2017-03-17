@@ -23,12 +23,13 @@
       is: 'vaadin-grid-table-focus-trap',
 
       hostAttributes: {
-        'tabindex': -1,
+        'tabindex': 0,
         'role': 'gridcell' // gridcell roles are for VoiceOver to announce "you're in a cell"
       },
 
       listeners: {
         'focus': '_onFocus',
+        'blur': '_onBlur',
         'focusin': '_stopPropagationForReannouncing',
         'focusout': '_stopPropagationForReannouncing'
       },
@@ -46,14 +47,23 @@
 
         // In native shadow, focus traps need to be inside the same scope as
         // the "labelled by" elements
-        if (Polymer.Settings.useNativeShadow) {
+        if (Polymer.Settings.useNativeShadow || Polymer.Settings.useShadow) {
           Polymer.dom(this).appendChild(this._primary);
           Polymer.dom(this).appendChild(this._secondary);
         }
       },
 
       _onFocus: function(e) {
+        // TODO: enable shift-tabbing out from header by removing tabindex
+        this.tabIndex = -1;
         this._primary.focus();
+      },
+
+      _onBlur: function(e) {
+        // TODO: enable tabbing into after focus has moved outside.
+        this.async(function() {
+          this.tabIndex = 0;
+        }, 1);
       },
 
       _onBaitFocus: function(e) {
