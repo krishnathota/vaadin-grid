@@ -69,7 +69,8 @@
     },
 
     _rowDetailsTemplateChanged: function(rowDetailsTemplate) {
-      var templatizer = new vaadin.elements.grid.Templatizer(this.dataHost);
+      var templatizer = new vaadin.elements.grid.Templatizer();
+      templatizer.dataHost = this.dataHost;
       templatizer._instanceProps = {
         expanded: true,
         item: true,
@@ -81,6 +82,7 @@
       Polymer.dom(this.root).appendChild(templatizer);
 
       templatizer.template = rowDetailsTemplate;
+      rowDetailsTemplate.templatizer = templatizer;
     },
 
     _isExpanded: function(item) {
