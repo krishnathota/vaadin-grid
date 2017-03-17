@@ -424,7 +424,7 @@
     },
 
     _rowDetailsTemplateChanged: function(rowDetailsTemplate, physicalItems, count) {
-      if (rowDetailsTemplate === undefined || physicalItems === undefined || count === undefined) {
+      if (rowDetailsTemplate === undefined || !physicalItems || count === undefined) {
         return;
       }
 
@@ -434,7 +434,7 @@
     },
 
     _columnTreeChanged: function(columnTree, physicalItems, count) {
-      if (columnTree === undefined || physicalItems === undefined || count === undefined) {
+      if (columnTree === undefined || !physicalItems || count === undefined) {
         return;
       }
 
