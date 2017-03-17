@@ -151,7 +151,7 @@ Custom property | Description | Default
       },
 
       observers: [
-        '_propertiesChanged(path, direction, isAttached)',
+        '_pathOrDirectionChanged(path, direction, isAttached)',
         '_directionOrOrderChanged(direction, _order)',
         '_cellHasFocusChanged(_cellHasFocus)'
       ],
@@ -198,7 +198,7 @@ Custom property | Description | Default
         this._cellHasFocus = false;
       },
 
-      _propertiesChanged: function(path, direction, isAttached) {
+      _pathOrDirectionChanged: function(path, direction, isAttached) {
         if (path === undefined || direction === undefined || isAttached === undefined) {
           return;
         }
