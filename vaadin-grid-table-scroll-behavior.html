@@ -101,12 +101,16 @@
       }
     },
 
-    listeners: {
-      'table.wheel': '_onWheel'
-    },
-
     ready: function() {
       this.scrollTarget = this.$.table;
+    },
+
+    attached: function() {
+      this.listen(this.scrollTarget, 'wheel', '_onWheel');
+    },
+
+    detached: function() {
+      this.unlisten(this.scrollTarget, 'wheel', '_onWheel');
     },
 
     /**
