@@ -84,7 +84,7 @@
         listenOnce(grid, 'items-assigned', function() {
           Polymer.dom.flush();
 
-          rows = getRows(scroller.$.items);
+          rows = getRows(grid.$.items);
           defaultHeight = getRows(header)[0].clientHeight;
 
           wrappers = getRowCells(rows[0]).map(function(cell) {
@@ -95,7 +95,7 @@
         });
 
         scroller = grid.$.scroller;
-        header = scroller.$.header;
+        header = grid.$.header;
 
         grid.dataProvider = function(info, callback) {
           var startIndex = info.pageSize * info.page;

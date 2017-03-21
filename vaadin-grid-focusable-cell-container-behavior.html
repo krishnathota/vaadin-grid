@@ -45,7 +45,7 @@
         var headerCell = lastHeaderRow.children[index];
         activeTarget = headerCell._cellContent.id + ' ' + activeTarget;
       }
-      this._getFocusTrap().activeTarget = activeTarget;
+      this.domHost.$.footerFocusTrap.activeTarget = activeTarget;
     },
 
     _dispatchEvents: function(cell, focused) {
@@ -85,17 +85,6 @@
           cell.focused = j === this._focusedCellIndex;
         }.bind(this));
       }.bind(this));
-    },
-
-    _getFocusTrap: function() {
-      switch(this.is) {
-        case 'vaadin-grid-table-header':
-          return this.domHost.$.headerFocusTrap;
-        case 'vaadin-grid-table-body':
-          return this.domHost.$.bodyFocusTrap;
-        case 'vaadin-grid-table-footer':
-          return this.domHost.$.footerFocusTrap;
-      }
     },
 
     focusLeft: function() {

@@ -50,7 +50,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
       if (isChrome) {
         // Full shadow polyfill isn't currently supported
-        return suites.concat([suite, suite + '?dom=shadow']);
+        return suites.concat([suite, suite + '?wc-shadydom=true']);
       } else {
         return suites.concat([suite]);
       }

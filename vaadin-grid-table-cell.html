@@ -54,7 +54,6 @@
 
         _cellContent: Object,
         _insertionPoint: Object,
-        _scrollerInsertionPoint: Object,
         _templatizer: Object
       },
 
@@ -66,7 +65,7 @@
         '_itemChanged(item, instance)',
         '_instanceChanged(instance, target)',
         '_selectedChanged(selected, instance)',
-        '_toggleContent(isAttached, _cellContent, _insertionPoint, _scrollerInsertionPoint)',
+        '_toggleContent(isAttached, _cellContent, _insertionPoint)',
         '_toggleInstance(isAttached, _templatizer, instance)',
         '_widthChanged(width)',
         '_orderChanged(order)',
@@ -79,7 +78,7 @@
 
         if (Polymer.Settings.useShadow === false) {
           this.classList.add('style-scope');
-          this.classList.add('vaadin-grid-table');
+          this.classList.add('vaadin-grid');
         }
       },
 
@@ -114,7 +113,13 @@
         if (isAttached) {
           this.listen(column, 'property-changed', '_columnPropChanged');
         } else {
-          this.unlisten(column, 'property-changed', '_columnPropChanged');
+          // prevent unwanted unlistening when elements are being moved around when
+          // ShadyDOM polyfill inserts elements into slots.
+          this.async(function() {
+            if (!this.isAttached) {
+              this.unlisten(column, 'property-changed', '_columnPropChanged');
+            }
+          });
         }
       },
 
@@ -167,7 +172,7 @@
       },
 
       _toggleContent: function(isAttached, cellContent, insertionPoint, scrollerInsertionPoint) {
-        if (isAttached === undefined || cellContent === undefined || insertionPoint === undefined || scrollerInsertionPoint === undefined) {
+        if (isAttached === undefined || cellContent === undefined || insertionPoint === undefined) {
           return;
         }
 
@@ -176,11 +181,9 @@
             Polymer.dom(this.target).appendChild(cellContent);
           }
           Polymer.dom(this).appendChild(insertionPoint);
-          Polymer.dom(this.target.$.scroller).insertBefore(scrollerInsertionPoint, Polymer.dom(this.target.$.scroller).firstElementChild);
         } else {
           this.async(function() {
             if (!this.isAttached && Polymer.dom(cellContent).parentNode === this.target) {
-              Polymer.dom(this.target.$.scroller).removeChild(scrollerInsertionPoint);
               Polymer.dom(this.target).removeChild(cellContent);
             }
           });
@@ -232,18 +235,11 @@
         if (Polymer.Element) {
           this._cellContent.setAttribute('slot', 'cell-content-id-' + contentId);
 
-          this._scrollerInsertionPoint = document.createElement('slot');
-          this._scrollerInsertionPoint.setAttribute('name', 'cell-content-id-' + contentId);
-          this._scrollerInsertionPoint.setAttribute('slot', 'cell-content-id-' + contentId);
-
           this._insertionPoint = document.createElement('slot');
           this._insertionPoint.setAttribute('name', 'cell-content-id-' + contentId);
 
         } else {
           this._cellContent.setAttribute('data-cell-content-id', contentId);
-
-          this._scrollerInsertionPoint = document.createElement('content');
-          this._scrollerInsertionPoint.setAttribute('select', '[data-cell-content-id="' + contentId + '"]');
 
           this._insertionPoint = document.createElement('content');
           this._insertionPoint.setAttribute('select', '[data-cell-content-id="' + contentId + '"]');
@@ -381,7 +377,7 @@
         if (Polymer.Settings.useShadow) {
           var scroller = this.target.$.scroller;
           scroller.toggleAttribute('no-content-pointer-events', true);
-          var cell = scroller.root.elementFromPoint(x, y);
+          var cell = this.domHost.root.elementFromPoint(x, y);
           scroller.toggleAttribute('no-content-pointer-events', false);
           if (cell && cell.getContentChildren) {
             return cell.getContentChildren(Polymer.Element ? 'slot': 'content')[0];

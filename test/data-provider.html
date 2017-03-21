@@ -241,6 +241,7 @@
 
       beforeEach(function() {
         grid = fixture('grid');
+        Polymer.dom.flush();
       });
 
       it('should warn about missing size', function() {
@@ -269,7 +270,7 @@
       it('should work with data provider set before size', function() {
         grid.dataProvider = infiniteDataProvider;
         grid.size = 3;
-        expect(getRows(grid.$.scroller.$.items)).to.have.length(3);
+        expect(getRows(grid.$.items)).to.have.length(3);
       });
 
       it('should work with data provider set after a long delay', function(done) {

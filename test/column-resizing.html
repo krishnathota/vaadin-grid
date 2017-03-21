@@ -62,7 +62,8 @@
       beforeEach(function(done) {
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
-        headerCells = getRowCells(getRows(grid.$.scroller.$.header)[0]);
+        Polymer.dom.flush();
+        headerCells = getRowCells(getRows(grid.$.header)[0]);
         handle = headerCells[0]._resizeHandle;
         Polymer.RenderStatus.afterNextRender(grid, done);
       });
@@ -88,7 +89,7 @@
         var scrollerRect = grid.$.scroller.getBoundingClientRect();
         var x = rect.left + handle.offsetWidth / 4;
         var y = rect.top + rect.height / 2;
-        expect(getElementFromPoint(grid.$.scroller, x, y)).to.equal(handle);
+        expect(getElementFromPoint(grid, x, y)).to.equal(handle);
       });
 
       it('should resize on track', function() {
@@ -116,11 +117,11 @@
         var table = grid.$.scroller.$.table;
 
         listenOnce(table, 'scroll', function() {
-          var secondCell = getRowCells(getRows(grid.$.scroller.$.header)[0])[1];
+          var secondCell = getRowCells(getRows(grid.$.header)[0])[1];
           var rect = secondCell.getBoundingClientRect();
           var x = rect.right - 10;
           var y = rect.top + rect.height / 2;
-          expect(getElementFromPoint(grid.$.scroller, x, y)).not.to.equal(secondCell._resizeHandle);
+          expect(getElementFromPoint(grid, x, y)).not.to.equal(secondCell._resizeHandle);
           done();
         });
 
@@ -203,7 +204,7 @@
       });
 
       it('should resize the child column', function() {
-        var headerRows = getRows(grid.$.scroller.$.header);
+        var headerRows = getRows(grid.$.header);
         var handle = getRowCells(headerRows[0])[0]._resizeHandle;
 
         var cell = getRowCells(headerRows[1])[1];
@@ -217,7 +218,7 @@
 
       it('should resize the last non-hidden child column', function() {
         grid._columnTree[1][1].hidden = true;
-        var headerRows = getRows(grid.$.scroller.$.header);
+        var headerRows = getRows(grid.$.header);
         var handle = getRowCells(headerRows[0])[0]._resizeHandle;
 
         var cell = getRowCells(headerRows[1])[0];

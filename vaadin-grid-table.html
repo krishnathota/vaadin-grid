@@ -25,7 +25,7 @@
         }
       }
 
-      :host {
+      vaadin-grid-table {
         display: block;
         position: relative;
         animation: 1ms appear;
@@ -41,9 +41,7 @@
         position: relative;
       }
 
-      #items,
-      #fixedsizer,
-      #outersizer {
+      #items {
         border-top: 0 solid transparent;
         border-bottom: 0 solid transparent;
       }
@@ -52,18 +50,6 @@
         box-sizing: border-box;
         margin: 0;
         position: absolute;
-      }
-
-      vaadin-grid-table-table {
-        height: 100%;
-        width: 100%;
-        display: block;
-        overflow: auto;
-        box-sizing: border-box;
-      }
-
-      [overflow-hidden] {
-        overflow: hidden;
       }
 
       vaadin-grid-table-body {
@@ -119,20 +105,16 @@
         transform: translateX(-100%);
       }
 
-      :host([column-reordering-allowed]) #header,
-      :host([column-resizing]) {
+      vaadin-grid-table[column-reordering-allowed] #header,
+      vaadin-grid-table[column-resizing] {
         -ms-user-select: none;
         -moz-user-select: none;
         -webkit-user-select: none;
         user-select: none;
       }
 
-      :host([column-resizing]) {
+      vaadin-grid-table[column-resizing] {
         cursor: col-resize;
-      }
-
-      :host([ios][column-resizing]) #outerscroller {
-        overflow: hidden;
       }
 
       .vaadin-grid-row:not([hidden]) {
@@ -148,10 +130,36 @@
         display: none;
       }
 
-      #sizerwrapper {
-        position: absolute;
+      vaadin-grid-table[no-content-pointer-events] .vaadin-grid-cell ::slotted(.cell-content) {
+        pointer-events: none;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-grid-table-table-styles">
+  <template>
+    <style>
+      :host([ios][column-resizing]) #outerscroller {
+        overflow: hidden;
+      }
+
+      #fixedsizer,
+      #outersizer {
+        border-top: 0 solid transparent;
+        border-bottom: 0 solid transparent;
+      }
+
+      vaadin-grid-table-table {
+        height: 100%;
         width: 100%;
-        z-index: -100;
+        display: block;
+        overflow: auto;
+        box-sizing: border-box;
+      }
+
+      [overflow-hidden] {
+        overflow: hidden;
       }
 
       vaadin-grid-sizer {
@@ -159,14 +167,10 @@
         width: 100%;
       }
 
-      ::slotted(vaadin-grid-column),
-      ::slotted(vaadin-grid-selection-column),
-      ::slotted(vaadin-grid-column-group) {
-        display: none;
-      }
-
-      :host([no-content-pointer-events]) .vaadin-grid-cell ::slotted(.cell-content) {
-        pointer-events: none;
+      #sizerwrapper {
+        position: absolute;
+        width: 100%;
+        z-index: -100;
       }
 
       #reorderghost {
@@ -175,6 +179,13 @@
         opacity: 0.5;
         pointer-events: none;
       }
+
+      ::slotted(vaadin-grid-column),
+      ::slotted(vaadin-grid-selection-column),
+      ::slotted(vaadin-grid-column-group) {
+        display: none;
+      }
+
     </style>
   </template>
 </dom-module>
@@ -209,7 +220,7 @@
 
       /* Cells */
 
-      vaadin-grid-table-table .vaadin-grid-row .vaadin-grid-cell:not([detailscell]) ::slotted(.cell-content) {
+      vaadin-grid-table .vaadin-grid-row .vaadin-grid-cell:not([detailscell]) ::slotted(.cell-content) {
         background: #fff;
         text-align: left;
         padding: 8px;
@@ -235,15 +246,15 @@
         @apply(--vaadin-grid-body-row-odd-cell);
       }
 
-      vaadin-grid-table-table .vaadin-grid-row .vaadin-grid-cell:not([detailscell])[last-frozen] ::slotted(.cell-content) {
+      vaadin-grid-table .vaadin-grid-row .vaadin-grid-cell:not([detailscell])[last-frozen] ::slotted(.cell-content) {
         @apply(--vaadin-grid-cell-last-frozen);
       }
 
-      :host(:not([scrolling])) vaadin-grid-table-body .vaadin-grid-row:hover .vaadin-grid-cell ::slotted(.cell-content) {
+      vaadin-grid-table:not([scrolling]) vaadin-grid-table-body .vaadin-grid-row:hover .vaadin-grid-cell ::slotted(.cell-content) {
         @apply(--vaadin-grid-body-row-hover-cell);
       }
 
-      vaadin-grid-table-table .vaadin-grid-row .vaadin-grid-cell.vaadin-grid-cell[lastcolumn] ::slotted(.cell-content) {
+      vaadin-grid-table .vaadin-grid-row .vaadin-grid-cell.vaadin-grid-cell[lastcolumn] ::slotted(.cell-content) {
         border-right: none;
       }
 
@@ -253,59 +264,28 @@
 
 <dom-module id="vaadin-grid-table">
   <template>
-    <style include="vaadin-grid-table-scroll-styles"></style>
-    <style include="vaadin-grid-row-details-styles"></style>
-    <style include="vaadin-grid-table-styles"></style>
+      <style include="vaadin-grid-table-table-scroll-styles"></style>
+      <style include="vaadin-grid-table-table-styles"></style>
 
-    <style include="vaadin-grid-table-themability-styles"></style>
-    <style include="vaadin-grid-selection-themability-styles"></style>
-    <style include="vaadin-grid-navigation-themability-styles"></style>
-    <style include="vaadin-grid-active-item-themability-styles"></style>
-    <style include="vaadin-grid-data-provider-themability-styles"></style>
-    <style include="vaadin-grid-row-details-themability-styles"></style>
-    <style include="vaadin-grid-column-reordering-themability-styles"></style>
+      <style include="vaadin-grid-data-provider-themability-styles"></style>
 
-    <!-- TODO: Shadow DOM doesn't let focusin events bubble, therefore on-focus also -->
-    <vaadin-grid-table-focus-trap id="headerFocusTrap" slot="headerFocusTrap" on-focus="_onHeaderFocus" on-focusin="_onHeaderFocus" on-focusout="_onFocusout">
-    </vaadin-grid-table-focus-trap>
-    <slot name="headerFocusTrap"></slot>
+      <div id="spinner"></div>
+      <vaadin-grid-table-table id="table" tabindex="-1" overflow-hidden$="[[_hideTableOverflow(scrollbarWidth, safari)]]">
+        <div id="sizerwrapper">
+          <vaadin-grid-sizer id="fixedsizer" top="[[_estScrollHeight]]" column-tree="[[_columnTree]]"></vaadin-grid-sizer>
+        </div>
+        <slot name="header"></slot>
+        <slot name="items"></slot>
+        <slot name="footer"></slot>
+      </vaadin-grid-table-table>
 
-    <vaadin-grid-table-focus-trap id="bodyFocusTrap" slot="bodyFocusTrap" on-focus="_onBodyFocus" on-focusin="_onBodyFocus" on-focusout="_onFocusout">
-    </vaadin-grid-table-focus-trap>
-    <slot name="bodyFocusTrap"></slot>
-
-    <div id="spinner"></div>
-    <vaadin-grid-table-table id="table" tabindex="-1" overflow-hidden$="[[_hideTableOverflow(scrollbarWidth, safari)]]">
-      <div id="sizerwrapper">
-        <vaadin-grid-sizer id="fixedsizer" top="[[_estScrollHeight]]" column-tree="[[columnTree]]"></vaadin-grid-sizer>
-      </div>
-      <vaadin-grid-table-header id="header" target="[[target]]" column-tree="[[columnTree]]"></vaadin-grid-table-header>
-      <vaadin-grid-table-body id="items"></vaadin-grid-table-body>
-      <vaadin-grid-table-footer id="footer" target="[[target]]" column-tree="[[columnTree]]"></vaadin-grid-table-footer>
-    </vaadin-grid-table-table>
-
-    <vaadin-grid-table-outer-scroller
-        id="outerscroller"
-        scroll-target="[[scrollTarget]]"
-        overflow-hidden$="[[_hideOuterScroller(scrollbarWidth, safari)]]"
-        ios$="[[ios]]"
-        scrolling$="[[scrolling]]">
-      <vaadin-grid-sizer id="outersizer" top="[[_estScrollHeight]]" column-tree="[[columnTree]]"></vaadin-grid-sizer>
+      <div id="reorderghost"></div>
+      <vaadin-grid-table-outer-scroller id="outerscroller" scroll-target="[[scrollTarget]]" overflow-hidden$="[[_hideOuterScroller(scrollbarWidth, safari)]]"
+      ios$="[[ios]]" scrolling$="[[scrolling]]">
+      <vaadin-grid-sizer id="outersizer" top="[[_estScrollHeight]]" column-tree="[[_columnTree]]"></vaadin-grid-sizer>
     </vaadin-grid-table-outer-scroller>
-
-    <div id="reorderghost"></div>
-
-    <!--
-      in native Shadow, we move the footer focus trap to light DOM.
-      It needs to be injected/slotted back inside the shadow root in order to be focusable.
-     -->
-    <slot name="footerFocusTrap"></slot>
-
-    <!-- This is for column elements, to make sure we can listen for events coming from them in Safari 9? -->
     <slot></slot>
-
-    <vaadin-grid-table-focus-trap id="footerFocusTrap" slot="footerFocusTrap" on-focus="_onFooterFocus" on-focusin="_onFooterFocus" on-focusout="_onFocusout">
-    </vaadin-grid-table-focus-trap>
+    <slot name="footerFocusTrap"></slot>
   </template>
 </dom-module>
 
@@ -318,7 +298,6 @@
     behaviors: [
       vaadin.elements.grid.IronListBehavior,
       vaadin.elements.grid.TableScrollBehavior,
-      vaadin.elements.grid.TableKeyboardBehavior,
       vaadin.elements.grid.TableColumnReorderingBehavior,
       Polymer.Templatizer
     ],
@@ -375,6 +354,14 @@
       'property-changed': '_columnPropChanged',
       'animationend': '_onAnimationEnd',
       'column-resizing': '_onColumnResize'
+    },
+
+    ready: function() {
+      // TODO: refactor and remove references to these while converting to ES6.
+      this.$ = this.$ || {};
+      this.$.header = this.domHost.$.header;
+      this.$.items = this.domHost.$.items;
+      this.$.footer = this.domHost.$.footer;
     },
 
     _onColumnResize: function() {
@@ -444,11 +431,14 @@
       });
 
       this._gridResizeHandler();
+
+      // make sure cells have been created inside rows before appending.
+      Polymer.dom.flush(this);
       this._updateLastColumn();
     },
 
     _updateLastColumn: function() {
-      Array.prototype.forEach.call(Polymer.dom(this.$.table).querySelectorAll('.vaadin-grid-row'), function(row) {
+      Array.prototype.forEach.call(Polymer.dom(this.domHost.root).querySelectorAll('.vaadin-grid-row'), function(row) {
         row.updateLastColumn();
       });
     },

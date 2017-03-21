@@ -74,9 +74,7 @@
         // to light children. We need to make sure footer focus trap is always
         // the very last element that can be tabbed into.
         if (Polymer.Settings.useNativeShadow || Polymer.Settings.useShadow) {
-          Polymer.dom(this).insertBefore(this.$.scroller.$.bodyFocusTrap, Polymer.dom(this).firstElementChild);
-          Polymer.dom(this).insertBefore(this.$.scroller.$.headerFocusTrap, Polymer.dom(this).firstElementChild);
-          Polymer.dom(this).appendChild(this.$.scroller.$.footerFocusTrap);
+          Polymer.dom(this).appendChild(this.$.footerFocusTrap);
         }
 
         this.debounce('check-imports', this._checkImports, 2000);

@@ -96,7 +96,7 @@
 
   <script>
     function getHeaderCell(grid, index) {
-      return grid.$.scroller.$.header.querySelectorAll('.vaadin-grid-cell')[index];
+      return grid.$.header.querySelectorAll('.vaadin-grid-cell')[index];
     }
 
     function getFirstHeaderCell(grid) {
@@ -142,8 +142,8 @@
         parent.appendChild(grid);
         Polymer.dom.flush();
 
-        expect(grid.$.scroller.$.header.children[0].children[0].children.length).to.eql(1); // with a header template
-        expect(grid.$.scroller.$.header.children[0].children[3].children.length).to.eql(1); // without a header template
+        expect(grid.$.header.children[0].children[0].children.length).to.eql(1); // with a header template
+        expect(grid.$.header.children[0].children[3].children.length).to.eql(1); // without a header template
       });
 
       it('should not restamp footer templates on attach', function() {
@@ -153,8 +153,8 @@
         parent.appendChild(grid);
         Polymer.dom.flush();
 
-        expect(grid.$.scroller.$.footer.children[0].children[0].children.length).to.eql(1); // with a footer template
-        expect(grid.$.scroller.$.footer.children[0].children[3].children.length).to.eql(1); // without footer template
+        expect(grid.$.footer.children[0].children[0].children.length).to.eql(1); // with a footer template
+        expect(grid.$.footer.children[0].children[3].children.length).to.eql(1); // without footer template
       });
 
       describe('using functions inside templates', function() {

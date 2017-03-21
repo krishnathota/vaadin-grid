@@ -178,8 +178,11 @@
         Polymer.dom(group).removeChild(columns[0]);
         Polymer.dom(group).removeChild(columns[1]);
         Polymer.dom.flush();
-        group._observer.flush(); //v2
-        
+
+        if (Polymer.Element) {
+          group._observer.flush();
+        }
+
         expect(group.hidden).to.be.true;
       });
 
@@ -187,11 +190,17 @@
         Polymer.dom(group).removeChild(columns[0]);
         Polymer.dom(group).removeChild(columns[1]);
         Polymer.dom.flush();
-        group._observer.flush(); //v2
+
+        if (Polymer.Element) {
+          group._observer.flush();
+        }
 
         Polymer.dom(group).appendChild(columns[0]);
         Polymer.dom.flush();
-        group._observer.flush(); //v2
+
+        if (Polymer.Element) {
+          group._observer.flush();
+        }
 
         expect(group.hidden).to.be.false;
       });
@@ -200,12 +209,18 @@
         Polymer.dom(group).removeChild(columns[0]);
         Polymer.dom(group).removeChild(columns[1]);
         Polymer.dom.flush();
-        group._observer.flush();
+
+        if (Polymer.Element) {
+          group._observer.flush();
+        }
 
         columns[0].hidden = true;
         Polymer.dom(group).appendChild(columns[0]);
         Polymer.dom.flush();
-        group._observer.flush(); //v2
+
+        if (Polymer.Element) {
+          group._observer.flush();
+        }
 
         expect(group.hidden).to.be.true;
       });

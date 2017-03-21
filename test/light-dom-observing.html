@@ -314,16 +314,17 @@
           grid = grid.$.grid || grid;
         }
 
+        grid.dataProvider = infiniteDataProvider;
+        Polymer.dom.flush();
+
         repeater = Polymer.dom(grid).querySelector(Polymer.Element ? 'dom-repeat' : 'template[is="dom-repeat"]');
         if (repeater) {
           repeater.items = data.columns; // TODO: Why needed?
         }
         scroller = grid.$.scroller;
-        header = scroller.$.header;
-        body = scroller.$.items;
-        footer = scroller.$.footer;
-        grid.dataProvider = infiniteDataProvider;
-        Polymer.dom.flush();
+        header = grid.$.header;
+        body = grid.$.items;
+        footer = grid.$.footer;
       }
 
       function expectFirstColumnHeader(columnName, level) {
@@ -465,7 +466,7 @@
           });
 
           it('should not create new cells', function() {
-            var row = getRows(grid.$.scroller.$.items)[0];
+            var row = getRows(grid.$.items)[0];
             var spy = sinon.spy(row, '_createCell');
             Polymer.dom.flush();
             var content = getHeaderCellContent(grid, 0, 0);

@@ -258,7 +258,7 @@
       });
 
       it('should have the correct scrollHeight', function() {
-        var rows = getRows(scroller.$.items);
+        var rows = getRows(grid.$.items);
         var cells = getRowCells(rows[0]);
         var expectedScrollHeight = cells[0].offsetHeight;
         expect(outerScroller.scrollHeight).to.eql(expectedScrollHeight);

@@ -57,8 +57,8 @@
         beforeEach(function() {
           grid = fixture('default');
           grid.dataProvider = infiniteDataProvider;
-          bodyRows = getRows(grid.$.scroller.$.items);
           Polymer.dom.flush();
+          bodyRows = getRows(grid.$.items);
         });
 
         function collapseRow(index) {
@@ -91,7 +91,7 @@
           var bounds = cells[1].getBoundingClientRect();
           expect(bounds.top).to.equal(cells[0].getBoundingClientRect().bottom);
           expect(bounds.left).to.equal(cells[0].getBoundingClientRect().left);
-          expect(bounds.right).to.equal(grid.$.scroller.$.items.getBoundingClientRect().right);
+          expect(bounds.right).to.equal(grid.$.items.getBoundingClientRect().right);
           expect(bounds.bottom).to.be.closeTo(bodyRows[2].getBoundingClientRect().top, 1);
           expect(bounds.height).to.be.above(10);
         });
@@ -108,7 +108,7 @@
           expandRow(1);
 
           grid.$.scroller.flushDebouncer('cache-elements');
-          bodyRows = getRows(grid.$.scroller.$.items);
+          bodyRows = getRows(grid.$.items);
 
           expect(grid.$.scroller._frozenCells).to.contain(getRowCells(bodyRows[1])[1]);
         });
@@ -125,7 +125,7 @@
           grid.$.scroller.scrollToIndex(0);
           grid.$.scroller.flushDebouncer('cache-elements');
 
-          bodyRows = getRows(grid.$.scroller.$.items);
+          bodyRows = getRows(grid.$.items);
           expect(grid.$.scroller._frozenCells).to.contain(getRowCells(bodyRows[1])[1]);
         });
 
@@ -135,7 +135,7 @@
 
           collapseRow(1);
           grid.$.scroller.flushDebouncer('cache-elements');
-          bodyRows = getRows(grid.$.scroller.$.items);
+          bodyRows = getRows(grid.$.items);
 
           expect(grid.$.scroller._frozenCells).to.be.empty;
         });
@@ -175,7 +175,7 @@
           grid.expandItem(items[0]);
 
           listenOnce(grid, 'items-assigned', function() {
-            var row = getRows(grid.$.scroller.$.items)[0];
+            var row = getRows(grid.$.items)[0];
             expect(row.offsetHeight).to.be.above(70);
             done();
           });

@@ -209,17 +209,16 @@ first element in the cell will be focused. You can override the behavior by appl
 <dom-module id="vaadin-grid">
   <template>
     <style>
-      :host {
+       :host {
         display: block;
         height: 400px;
         background: var(--primary-background-color, #fff);
         box-sizing: border-box;
         border: 1px solid var(--divider-color, rgba(0, 0, 0, 0.08));
-
         -webkit-tap-highlight-color: transparent;
       }
 
-      :host(:focus) {
+       :host(:focus) {
         outline: none;
       }
 
@@ -227,15 +226,37 @@ first element in the cell will be focused. You can override the behavior by appl
         height: 100%;
         width: 100%;
       }
-
     </style>
-    <vaadin-grid-table id="scroller" loading$=[[_loading]] bind-data="[[_bindData]]" size="[[size]]"
-        column-tree="[[_columnTree]]" content-target="[[_getContentTarget()]]"
-        row-details-template="[[_rowDetailsTemplate]]" column-reordering-allowed="[[columnReorderingAllowed]]">
-      <slot name="headerFocusTrap" slot="headerFocusTrap"></slot>
-      <slot name="bodyFocusTrap" slot="bodyFocusTrap"></slot>
-      <slot name="footerFocusTrap" slot="footerFocusTrap"></slot>
+
+    <style include="vaadin-grid-table-scroll-styles"></style>
+    <style include="vaadin-grid-row-details-styles"></style>
+    <style include="vaadin-grid-table-styles"></style>
+
+    <style include="vaadin-grid-table-themability-styles"></style>
+    <style include="vaadin-grid-selection-themability-styles"></style>
+    <style include="vaadin-grid-navigation-themability-styles"></style>
+    <style include="vaadin-grid-active-item-themability-styles"></style>
+    <style include="vaadin-grid-row-details-themability-styles"></style>
+    <style include="vaadin-grid-column-reordering-themability-styles"></style>
+
+    <vaadin-grid-table id="scroller" loading$=[[_loading]] bind-data="[[_bindData]]" size="[[size]]" column-tree="[[_columnTree]]"
+      content-target="[[_getContentTarget()]]" row-details-template="[[_rowDetailsTemplate]]" column-reordering-allowed="[[columnReorderingAllowed]]">
+      <vaadin-grid-table-header id="header" slot="header" target="[[_getContentTarget()]]" column-tree="[[_columnTree]]"></vaadin-grid-table-header>
+      <vaadin-grid-table-body id="items" slot="items"></vaadin-grid-table-body>
+      <vaadin-grid-table-footer id="footer" slot="footer" target="[[_getContentTarget()]]" column-tree="[[_columnTree]]"></vaadin-grid-table-footer>
+
+      <!--
+      in native Shadow, we move the footer focus trap to light DOM.
+      It needs to be injected/slotted back inside the shadow root in order to be focusable.
+     -->
+      <slot name="footerFocusTrap"></slot>
+
+      <!-- This is for column elements, to make sure we can listen for events coming from them in Safari 9? -->
+      <!-- WARNING: this is converted to <content> without selector in P1 which might cause performance issues together with large number of cell content injection points. -->
       <slot></slot>
+
+      <vaadin-grid-table-focus-trap id="footerFocusTrap" slot="footerFocusTrap" on-focus-gained="_onFooterFocus" on-focus-lost="_onFocusout">
+      </vaadin-grid-table-focus-trap>
     </vaadin-grid-table>
   </template>
 </dom-module>
@@ -261,7 +282,7 @@ first element in the cell will be focused. You can override the behavior by appl
       _rowDetailsTemplate: Object,
 
       _bindData: {
-        value: function() {
+        value: function () {
           return this._getItem.bind(this);
         }
       }
@@ -278,7 +299,8 @@ first element in the cell will be focused. You can override the behavior by appl
       vaadin.elements.grid.SelectionBehavior,
       vaadin.elements.grid.SortBehavior,
       vaadin.elements.grid.FilterBehavior,
-      vaadin.elements.grid.ColumnReorderingBehavior
+      vaadin.elements.grid.ColumnReorderingBehavior,
+      vaadin.elements.grid.TableKeyboardBehavior
     ],
 
     listeners: {
@@ -286,30 +308,32 @@ first element in the cell will be focused. You can override the behavior by appl
       'iron-resize': '_gridResizeHandler'
     },
 
-    _updateItem: function(row, item) {
+    _updateItem: function (row, item) {
       row.style.minHeight = item ? '' : this.$.scroller._physicalAverage + 'px';
       row.item = item;
       row.selected = this._isSelected(item);
       row.expanded = this._isExpanded(item);
       row.active = item !== null && item == this.activeItem;
-      row.focused = row.index === this.$.scroller.$.items._focusedRowIndex;
+      row.focused = row.index === this.$.items._focusedRowIndex;
     },
 
-    _getContentTarget: function() {
+    _getContentTarget: function () {
       return this;
     },
 
-    ready: function() {
+    ready: function () {
       this._updateColumnTree();
       this._rowDetailsTemplate = Polymer.dom(this).querySelector('template.row-details') || undefined;
       this.$.scroller.target = this;
 
       if (document.doctype === null) {
-        console.warn('<vaadin-grid> requires the "standards mode" declaration. Please add <!DOCTYPE html> to the HTML document.');
+        console.warn(
+          '<vaadin-grid> requires the "standards mode" declaration. Please add <!DOCTYPE html> to the HTML document.'
+        );
       }
     },
 
-    _columnPropChanged: function(e) {
+    _columnPropChanged: function (e) {
       if (e.detail.path === '_childColumns') {
         this._updateColumnTree();
       }
@@ -317,7 +341,7 @@ first element in the cell will be focused. You can override the behavior by appl
       e.stopPropagation();
     },
 
-    _gridResizeHandler: function() {
+    _gridResizeHandler: function () {
       this.$.scroller._gridResizeHandler();
     }
   });

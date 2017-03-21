@@ -108,6 +108,10 @@
       },
 
       _focusedCellChanged: function(rowIndex, cellIndex) {
+        if (rowIndex === undefined || cellIndex === undefined) {
+          return;
+        }
+
         Array.prototype.forEach.call(Polymer.dom(this).children, function(row) {
           row.focused = row.index === rowIndex;
 

@@ -117,15 +117,15 @@
     }
 
     function getVisualHeaderCellContent(grid, row, col) {
-      return getVisualCellContent(grid.$.scroller.$.header, row, col);
+      return getVisualCellContent(grid.$.header, row, col);
     }
 
     function getVisualColumnCellContents(grid, col) {
       var scroller = grid.$.scroller;
-      var headerContent = getVisualCellContent(scroller.$.header, getRows(scroller.$.header).length - 1, col);
-      var footerContent = getVisualCellContent(scroller.$.footer, 0, col);
-      var bodyContent = Array.prototype.map.call(Polymer.dom(scroller.$.items).children, function(row, rowIndex) {
-        return getVisualCellContent(scroller.$.items, rowIndex, col);
+      var headerContent = getVisualCellContent(grid.$.header, getRows(grid.$.header).length - 1, col);
+      var footerContent = getVisualCellContent(grid.$.footer, 0, col);
+      var bodyContent = Array.prototype.map.call(Polymer.dom(grid.$.items).children, function(row, rowIndex) {
+        return getVisualCellContent(grid.$.items, rowIndex, col);
       });
       return bodyContent.concat(headerContent).concat(footerContent);
     }
@@ -150,7 +150,7 @@
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
         Polymer.RenderStatus.afterNextRender(grid, function() {
-          var colCount = getRowCells(getRows(grid.$.scroller.$.header)[0]).length;
+          var colCount = getRowCells(getRows(grid.$.header)[0]).length;
           headerContent = [];
           for (var i = 0; i < colCount; i++) {
             headerContent.push(getVisualHeaderCellContent(grid, 0, i));
@@ -293,7 +293,7 @@
         it('should allow dropping over body cell of another column', function() {
           dragAndDropOver(
             headerContent[0],
-            getVisualCellContent(grid.$.scroller.$.items, 0, 1)
+            getVisualCellContent(grid.$.items, 0, 1)
           );
           expectVisualOrder(grid, [2, 1]);
         });
@@ -320,7 +320,7 @@
         });
 
         it('should update lastcolumn attribute (details open)', function() {
-          grid.expandItem(getRows(grid.$.scroller.$.items)[0].item);
+          grid.expandItem(getRows(grid.$.items)[0].item);
           dragOver(headerContent[2], headerContent[3]);
           var cell = getCellByCellContent(grid, headerContent[2]);
           cell = getCellByCellContent(grid, headerContent[2]);
@@ -425,7 +425,7 @@
       it('should allow dropping group over body cell of another group', function() {
         dragAndDropOver(
           getVisualHeaderCellContent(grid, 0, 0),
-          getVisualCellContent(grid.$.scroller.$.items, 0, 3)
+          getVisualCellContent(grid.$.items, 0, 3)
         );
         expectVisualOrder(grid, [21, 22, 11, 12]);
       });

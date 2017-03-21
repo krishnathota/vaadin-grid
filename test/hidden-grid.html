@@ -70,7 +70,7 @@
 
         it('should measure header on appear', function() {
           var contentRect = getBodyCellContent(grid, 0, 0).getBoundingClientRect();
-          var headerRect = grid.$.scroller.$.header.getBoundingClientRect();
+          var headerRect = grid.$.header.getBoundingClientRect();
           expect(contentRect.top).to.be.closeTo(headerRect.bottom, 1);
         });
 
