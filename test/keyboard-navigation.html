@@ -310,7 +310,10 @@
         describe('navigating with tab', function() {
           beforeEach(function() {
             grid.navigating = true;
-            grid._observer.flush();
+
+            if (Polymer.Element) {
+              grid._observer.flush();
+            }
           });
 
           it('should have a focus trap as the very last child', function() {

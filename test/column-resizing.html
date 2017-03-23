@@ -198,7 +198,10 @@
         var newColumn = document.createElement('vaadin-grid-column');
         Polymer.dom(grid._columnTree[0][0]).appendChild(newColumn);
         Polymer.dom.flush();
-        grid._columnTree[0][0]._observer.flush(); //v2
+
+        if (Polymer.Element) {
+          grid._columnTree[0][0]._observer.flush();
+        }
 
         expect(newColumn.resizable).to.be.true;
       });
