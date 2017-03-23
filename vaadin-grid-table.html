@@ -272,7 +272,7 @@
       <div id="spinner"></div>
       <vaadin-grid-table-table id="table" tabindex="-1" overflow-hidden$="[[_hideTableOverflow(scrollbarWidth, safari)]]">
         <div id="sizerwrapper">
-          <vaadin-grid-sizer id="fixedsizer" top="[[_estScrollHeight]]" column-tree="[[_columnTree]]"></vaadin-grid-sizer>
+          <vaadin-grid-sizer id="fixedsizer" top="[[_estScrollHeight]]" column-tree="[[columnTree]]"></vaadin-grid-sizer>
         </div>
         <slot name="header"></slot>
         <slot name="items"></slot>
@@ -282,7 +282,7 @@
       <div id="reorderghost"></div>
       <vaadin-grid-table-outer-scroller id="outerscroller" scroll-target="[[scrollTarget]]" overflow-hidden$="[[_hideOuterScroller(scrollbarWidth, safari)]]"
       ios$="[[ios]]" scrolling$="[[scrolling]]">
-      <vaadin-grid-sizer id="outersizer" top="[[_estScrollHeight]]" column-tree="[[_columnTree]]"></vaadin-grid-sizer>
+      <vaadin-grid-sizer id="outersizer" top="[[_estScrollHeight]]" column-tree="[[columnTree]]"></vaadin-grid-sizer>
     </vaadin-grid-table-outer-scroller>
     <slot></slot>
     <slot name="footerFocusTrap"></slot>
