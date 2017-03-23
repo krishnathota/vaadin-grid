@@ -41,35 +41,32 @@
       <template>
         <dom-bind>
           <template is="dom-bind">
-          
-            <!-- Import vaadin-grid-sorter.html (typically placed inside the <head> container) -->
-            <link rel="import" href="../vaadin-grid-sorter.html">
-          
+
             <x-array-data-provider items="{{items}}"></x-array-data-provider>
-          
+
             <paper-checkbox checked="{{multiSort}}">Enable Multi-Sorting</paper-checkbox>
 
             <vaadin-grid aria-label="Sorting Example" items="[[items]]" multi-sort="[[multiSort]]">
-          
+
               <vaadin-grid-column width="50px" flex-grow="0">
                 <template class="header">#</template>
                 <template>[[index]]</template>
               </vaadin-grid-column>
-          
+
               <vaadin-grid-column>
                 <template class="header">
                   <vaadin-grid-sorter path="name.first">First Name</vaadin-grid-sorter>
                 </template>
                 <template>[[item.name.first]]</template>
               </vaadin-grid-column>
-          
+
               <vaadin-grid-column>
                 <template class="header">
                   <vaadin-grid-sorter path="name.last" direction="asc">Last Name</vaadin-grid-sorter>
                 </template>
                 <template>[[item.name.last]]</template>
               </vaadin-grid-column>
-          
+
             </vaadin-grid>
           </template>
         </dom-bind>
@@ -168,19 +165,16 @@
       <template>
         <dom-bind>
           <template is="dom-bind">
-          
-            <!-- Import vaadin-grid-filter.html (typically placed inside the <head> container) -->
-            <link rel="import" href="../vaadin-grid-filter.html">
-          
+
             <x-array-data-provider items="{{items}}"></x-array-data-provider>
-          
+
             <vaadin-grid aria-label="Filtering Example" items="[[items]]">
-          
+
               <vaadin-grid-column width="50px" flex-grow="0">
                 <template class="header">#</template>
                 <template>[[index]]</template>
               </vaadin-grid-column>
-          
+
               <vaadin-grid-column>
                 <template class="header">
                   <vaadin-grid-filter aria-label="First Name" path="name.first" value="[[_filterFirstName]]">
@@ -189,7 +183,7 @@
                 </template>
                 <template>[[item.name.first]]</template>
               </vaadin-grid-column>
-          
+
               <vaadin-grid-column>
                 <template class="header">
                   <vaadin-grid-filter aria-label="Last Name" path="name.last" value="[[_filterLastName]]">
@@ -198,7 +192,7 @@
                 </template>
                 <template>[[item.name.last]]</template>
               </vaadin-grid-column>
-          
+
             </vaadin-grid>
           </template>
         </dom-bind>
