@@ -442,9 +442,9 @@
 
         // force resetting _focusedCell in case element reordering has happened.
         this._virtualFocus._focusedCellChanged(focusedIndex, this._virtualFocus._focusedCellIndex);
-      } else {
-        this._ensureElementInViewport(this._virtualFocus._focusedCell);
       }
+
+      this._ensureElementInViewport(this._virtualFocus._focusedCell);
     },
 
     _ensureElementInViewport: function(element) {
