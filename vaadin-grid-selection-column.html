@@ -98,7 +98,7 @@ When the grid is configured with an array of items as the data provider, it prov
         // needed to override the dataHost correctly in case internal template is used.
         headerTemplate.templatizer.dataHost = headerTemplate === this.$.defaultHeaderTemplate ? this : this.dataHost;
         this.headerTemplate = headerTemplate;
-        
+
         var template = this._prepareTemplatizer(this._findTemplate('template:not(.header):not(.footer)') || this.$.defaultBodyTemplate);
         // needed to override the dataHost correctly in case internal template is used.
         template.templatizer.dataHost = template === this.$.defaultBodyTemplate ? this : this.dataHost;
@@ -126,7 +126,7 @@ When the grid is configured with an array of items as the data provider, it prov
 
       _findGrid: function (elm) {
         while (elm && elm.localName != 'vaadin-grid') {
-          elm = elm.parentElement;
+          elm = Polymer.dom(elm).parentNode;
         }
         return elm || undefined;
       },

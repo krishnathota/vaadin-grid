@@ -166,6 +166,7 @@
       it('should add the item to selectedItems when row is clicked and auto-select is enabled', function() {
         var cell = getRowCells(rows[1])[1];
         cell.click();
+
         expect(grid.selectedItems).to.eql([getCellContent(cell).textContent]);
       });
 
