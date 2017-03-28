@@ -55,7 +55,7 @@ and handlers for filtering the grid data.
       ready: function() {
         var child = Polymer.dom(this).firstElementChild;
         if (child && child.getAttribute('slot') !== 'filter') {
-          console.warn('Make sure you have assinged slot="filter" to the child elements of <vaadin-grid-filter>');
+          console.warn('Make sure you have assigned slot="filter" to the child elements of <vaadin-grid-filter>');
           child.setAttribute('slot', 'filter');
         }
       },
